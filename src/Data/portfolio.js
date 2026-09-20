@@ -1,24 +1,21 @@
 export const PROFILE = {
-  name: "Hugo López",
-  initials: "HL",
+  name: "Hugo López Sanz",
+  initials: "H",
   role: "Desarrollador web",
   focus: "Inteligencia Artificial y Big Data",
   location: "Segovia, España",
   age: "22 años",
   degree: "Técnico Superior en DAW",
-  availability: "[AÑADIR DISPONIBILIDAD]",
-  statusLine:
-    "Abierto a oportunidades en el sector tecnológico",
-
+  availability: "Total",
+  statusLine: "Abierto a oportunidades en el sector tecnológico",
   photo: null,
-
-  photoAlt: "Fotografía de Hugo López",
+  photoAlt: "Mi foto",
 };
 
 export const CONTACT = {
-  email: "[AÑADIR EMAIL]",
-  linkedin: "[AÑADIR LINKEDIN]",
-  github: "[AÑADIR GITHUB]",
+  email: "hugolopezsanz08@gmail.com",
+  linkedin: "https://www.linkedin.com/in/hugolopezsanz",
+  github: "https://github.com/HuGoLppz",
 };
 
 export const EDUCATION = [
@@ -26,8 +23,8 @@ export const EDUCATION = [
     title:
       "Técnico Superior en Desarrollo de Aplicaciones Web",
     subtitle: "DAW",
-    center: "[AÑADIR CENTRO]",
-    period: "[AÑADIR AÑOS]",
+    center: "IES María Moliner",
+    period: "2022-2024",
     status: "done",
     statusText: "Formación completada",
     description:
@@ -46,13 +43,13 @@ export const EDUCATION = [
     title:
       "Curso de Especialización en Inteligencia Artificial y Big Data",
     subtitle: "Especialización",
-    center: "[AÑADIR CENTRO]",
-    period: "[AÑADIR AÑOS]",
+    center: "Instituto Nebrija de Formación Profesional",
+    period: "2026-2027",
     status: "next",
     statusText:
       "En formación / próxima formación",
     description:
-      "Especialización orientada al tratamiento de datos y a los sistemas inteligentes. Áreas del programa:",
+      "Especialización orientada al tratamiento de datos y a los sistemas inteligentes",
     tags: [
       "Inteligencia Artificial",
       "Big Data",
@@ -85,17 +82,15 @@ export const SKILLS = [
       { name: "PHP", level: "base" },
       { name: "SQL", level: "base" },
       { name: "Bases de datos", level: "base" },
+      { name: "Node", level: "learning" },
     ],
   },
 
   {
-    group: "IA y datos",
+    group: "IA y Big Data",
     icon: "spark",
     items: [
-      {
-        name: "Inteligencia Artificial",
-        level: "learning",
-      },
+      
       {
         name: "Big Data",
         level: "learning",
@@ -112,49 +107,27 @@ export const SKILLS = [
         name: "Automatización",
         level: "learning",
       },
+      {
+        name: "Python",
+        level: "learning",
+      },
+      {
+        name: "Inteligencia Artificial",
+        level: "learning",
+      },
     ],
   },
 ];
 
 export const PROJECTS = [
   {
-    focus: "Desarrollo web",
-    title: "[Nombre del proyecto]",
-    description:
-      "[Añadir descripción del proyecto]",
-    tech: ["[Tecnología]", "[Tecnología]"],
-    url: null,
-    repo: null,
-  },
-
-  {
-    focus: "Inteligencia Artificial",
-    title: "[Nombre del proyecto]",
-    description:
-      "[Añadir descripción del proyecto]",
-    tech: ["[Tecnología]", "[Tecnología]"],
-    url: null,
-    repo: null,
-  },
-
-  {
-    focus: "Automatización",
-    title: "[Nombre del proyecto]",
-    description:
-      "[Añadir descripción del proyecto]",
-    tech: ["[Tecnología]", "[Tecnología]"],
-    url: null,
-    repo: null,
-  },
-
-  {
     focus: "Aplicación",
-    title: "[Nombre del proyecto]",
+    title: "FinTrack - Personal Finance Manager",
     description:
-      "[Añadir descripción del proyecto]",
-    tech: ["[Tecnología]", "[Tecnología]"],
-    url: null,
-    repo: null,
+      "Aplicación web para controlar los ingresos y gastos",
+    tech: ["Finanzas", "Personal"],
+    url: "https://github.com/HuGoLppz/FinTrack---Personal-Finance-Manager",
+    repo: "https://github.com/HuGoLppz/FinTrack---Personal-Finance-Manager",
   },
 ];
 
