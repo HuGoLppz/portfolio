@@ -1,7 +1,7 @@
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { PROFILE } from "../data/portfolio";
+import { PROFILE } from "../Data/portfolio";
 
 const About = () => {
   const pillars = [

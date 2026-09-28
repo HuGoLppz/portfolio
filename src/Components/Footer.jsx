@@ -1,5 +1,5 @@
 import Icon from "./Icon";
-import { PROFILE } from "../data/portfolio";
+import { PROFILE } from "../Data/portfolio";
 
 const Footer = () => (
   <footer className="footer">

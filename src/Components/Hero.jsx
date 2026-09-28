@@ -2,7 +2,7 @@ import Icon from "./Icon";
 
 import {
   PROFILE,
-} from "../data/portfolio";
+} from "../Data/portfolio";
 
 const isPlaceholder = (value) =>
   !value || value.trim().startsWith("[");

@@ -1,7 +1,7 @@
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { CONTACT } from "../data/portfolio";
+import { CONTACT } from "../Data/portfolio";
 
 const isPlaceholder = (value) =>
   !value || value.trim().startsWith("[");

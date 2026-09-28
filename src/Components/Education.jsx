@@ -1,7 +1,7 @@
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { EDUCATION } from "../data/portfolio";
+import { EDUCATION } from "../Data/portfolio";
 
 const Education = () => (
   <section className="section section--alt" id="formacion">

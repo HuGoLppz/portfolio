@@ -1,7 +1,7 @@
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { SKILLS } from "../data/portfolio";
+import { SKILLS } from "../Data/portfolio";
 
 const Skills = () => (
   <section className="section" id="skills">

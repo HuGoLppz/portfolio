@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
-import Navbar from "./components/Navbar.jsx";
-import Hero from "./components/Hero.jsx";
-import About from "./components/About.jsx";
-import Education from "./components/Education.jsx";
-import Skills from "./components/Skills.jsx";
-import Projects from "./components/Projects.jsx";
-import Contact from "./components/Contact.jsx";
-import Footer from "./components/Footer.jsx";
+import Navbar from "./Components/Navbar.jsx";
+import Hero from "./Components/Hero.jsx";
+import About from "./Components/About.jsx";
+import Education from "./Components/Education.jsx";
+import Skills from "./Components/Skills.jsx";
+import Projects from "./Components/Projects.jsx";
+import Contact from "./Components/Contact.jsx";
+import Footer from "./Components/Footer.jsx";
 
 function App() {
   const [theme, setTheme] = useState("dark");

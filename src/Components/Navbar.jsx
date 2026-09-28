@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Icon from "./Icon";
-import { PROFILE, SECTIONS } from "../data/portfolio";
+import { PROFILE, SECTIONS } from "../Data/portfolio";
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [open, setOpen] = useState(false);
