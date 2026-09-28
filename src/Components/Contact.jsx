@@ -6,11 +6,12 @@ import { CONTACT } from "../Data/portfolio";
 const isPlaceholder = (value) =>
   !value || value.trim().startsWith("[");
 
-const Contact = () => {
+const Contact = ({ content }) => {
+  const { contact: contactText } = content;
   const items = [
     {
       icon: "mail",
-      label: "Email",
+      label: contactText.labels.email,
       value: CONTACT.email,
       href: isPlaceholder(CONTACT.email)
         ? null
@@ -18,7 +19,7 @@ const Contact = () => {
     },
     {
       icon: "linkedin",
-      label: "LinkedIn",
+      label: contactText.labels.linkedin,
       value: CONTACT.linkedin,
       href: isPlaceholder(CONTACT.linkedin)
         ? null
@@ -26,7 +27,7 @@ const Contact = () => {
     },
     {
       icon: "github",
-      label: "GitHub",
+      label: contactText.labels.github,
       value: CONTACT.github,
       href: isPlaceholder(CONTACT.github)
         ? null
@@ -38,9 +39,9 @@ const Contact = () => {
     <section className="section" id="contacto">
       <div className="wrap">
         <SectionHead
-          kicker="Contacto"
-          title="Hablemos"
-          lead="Si buscas un perfil junior con base en desarrollo web y ganas de crecer en IA y datos, escríbeme."
+          kicker={contactText.kicker}
+          title={contactText.title}
+          lead={contactText.lead}
         />
 
         <div className="contact">
@@ -106,11 +107,8 @@ const Contact = () => {
 
         <Reveal className="cta">
           <div>
-            <h3>¿Trabajamos juntos?</h3>
-            <p>
-              Disponible para prácticas, primer empleo o
-              proyectos en los que aportar y seguir aprendiendo.
-            </p>
+            <h3>{contactText.ctaTitle}</h3>
+            <p>{contactText.ctaText}</p>
           </div>
 
           {isPlaceholder(CONTACT.email) ? (
@@ -118,14 +116,14 @@ const Contact = () => {
               className="btn btn--primary"
               disabled
             >
-              Enviar un email
+              {contactText.sendEmail}
             </button>
           ) : (
             <a
               className="btn btn--primary"
               href={"mailto:" + CONTACT.email}
             >
-              Enviar un email
+              {contactText.sendEmail}
               <Icon name="arrow" size={17} />
             </a>
           )}

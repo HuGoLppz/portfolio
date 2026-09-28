@@ -8,9 +8,12 @@ import Skills from "./Components/Skills.jsx";
 import Projects from "./Components/Projects.jsx";
 import Contact from "./Components/Contact.jsx";
 import Footer from "./Components/Footer.jsx";
+import { DEFAULT_LOCALE, getPortfolio } from "./Data/portfolio.js";
 
 function App() {
   const [theme, setTheme] = useState("dark");
+  const [locale, setLocale] = useState(DEFAULT_LOCALE);
+  const portfolio = getPortfolio(locale);
 
   useEffect(() => {
     let saved = null;
@@ -38,29 +41,40 @@ function App() {
     }
   }, [theme]);
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const toggleTheme = useCallback(() => {
     setTheme((current) =>
       current === "dark" ? "light" : "dark"
     );
   }, []);
 
+  const toggleLocale = useCallback(() => {
+    setLocale((current) => (current === "es" ? "en" : "es"));
+  }, []);
+
   return (
     <>
       <Navbar
+        content={portfolio}
+        locale={locale}
         theme={theme}
         toggleTheme={toggleTheme}
+        toggleLocale={toggleLocale}
       />
 
       <main id="main">
-        <Hero /> 
-        <About />
-        <Education />
-        <Skills />
-        <Projects />
-        <Contact />
+        <Hero content={portfolio} />
+        <About content={portfolio} />
+        <Education content={portfolio} />
+        <Skills content={portfolio} />
+        <Projects content={portfolio} />
+        <Contact content={portfolio} />
       </main>
 
-      <Footer />
+      <Footer content={portfolio} />
     </>
   );
 }

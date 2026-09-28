@@ -2,9 +2,7 @@ const Icon = ({ name, size = 18 }) => {
   const paths = {
     menu: <path d="M3 6h18M3 12h18M3 18h18" />,
 
-    close: (
-      <path d="M6 6l12 12M18 6L6 18" />
-    ),
+    close: <path d="M6 6l12 12M18 6L6 18" />,
 
     sun: (
       <>
@@ -13,36 +11,20 @@ const Icon = ({ name, size = 18 }) => {
       </>
     ),
 
-    moon: (
-      <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4z" />
-    ),
+    moon: <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4z" />,
 
-    arrow: (
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    ),
+    arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
 
     mail: (
       <>
-        <rect
-          x="2.5"
-          y="4.5"
-          width="19"
-          height="15"
-          rx="2.5"
-        />
+        <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
         <path d="M3 7l9 6 9-6" />
       </>
     ),
 
     linkedin: (
       <>
-        <rect
-          x="2.5"
-          y="2.5"
-          width="19"
-          height="19"
-          rx="3"
-        />
+        <rect x="2.5" y="2.5" width="19" height="19" rx="3" />
         <path d="M7 10v7M7 7.2v.1M11.5 17v-4a2.5 2.5 0 0 1 5 0v4" />
       </>
     ),
@@ -67,9 +49,7 @@ const Icon = ({ name, size = 18 }) => {
       <path d="M12 3l1.9 5.4L19 10l-5.1 1.6L12 17l-1.9-5.4L5 10l5.1-1.6zM18.5 15.5l.8 2.2 2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" />
     ),
 
-    book: (
-      <path d="M4 4.5A2 2 0 0 1 6 3h13v15H6a2 2 0 0 0-2 2z M19 18v3H6" />
-    ),
+    book: <path d="M4 4.5A2 2 0 0 1 6 3h13v15H6a2 2 0 0 0-2 2z M19 18v3H6" />,
 
     layers: (
       <path d="M12 2.8l9 4.6-9 4.6-9-4.6zM3 12.2l9 4.6 9-4.6M3 16.6l9 4.6 9-4.6" />
@@ -82,9 +62,7 @@ const Icon = ({ name, size = 18 }) => {
       </>
     ),
 
-    trend: (
-      <path d="M3 17l6-6 4 4 8-8M15 7h6v6" />
-    ),
+    trend: <path d="M3 17l6-6 4 4 8-8M15 7h6v6" />,
 
     pin: (
       <>

@@ -1,31 +1,32 @@
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { SKILLS } from "../Data/portfolio";
+const Skills = ({ content }) => {
+  const { skills } = content;
 
-const Skills = () => (
+  return (
   <section className="section" id="skills">
     <div className="wrap">
       <SectionHead
-        kicker="Skills"
-        title="Qué domino y qué estoy aprendiendo"
-        lead="Separo de forma explícita lo que forma parte de mi base de lo que estoy incorporando ahora mismo."
+        kicker={skills.kicker}
+        title={skills.title}
+        lead={skills.lead}
       />
 
       <Reveal className="legend">
         <span className="legend__item">
           <span className="mark mark--solid" aria-hidden="true" />
-          Base adquirida en mi formación
+          {skills.baseLabel}
         </span>
 
         <span className="legend__item">
           <span className="mark mark--open" aria-hidden="true" />
-          En aprendizaje o actualización
+          {skills.learningLabel}
         </span>
       </Reveal>
 
       <div className="skills">
-        {SKILLS.map((category, i) => (
+        {skills.groups.map((category, i) => (
           <Reveal
             key={category.group}
             className="skillcard"
@@ -52,13 +53,13 @@ const Skills = () => (
                   aria-label={
                     skill.name +
                     (skill.level === "learning"
-                      ? ", en aprendizaje o actualización"
-                      : ", base adquirida en mi formación")
+                      ? skills.learningAriaSuffix
+                      : skills.baseAriaSuffix)
                   }
                   title={
                     skill.level === "learning"
-                      ? "En aprendizaje o actualización"
-                      : "Base adquirida en mi formación"
+                      ? skills.learningLabel
+                      : skills.baseLabel
                   }
                 >
                   <span
@@ -80,6 +81,7 @@ const Skills = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default Skills;

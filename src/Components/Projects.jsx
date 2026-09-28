@@ -1,22 +1,23 @@
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { PROJECTS } from "../Data/portfolio";
-
 const isPlaceholder = (value) =>
   !value || value.trim().startsWith("[");
 
-const Projects = () => (
+const Projects = ({ content }) => {
+  const { projects } = content;
+
+  return (
   <section className="section section--alt" id="proyectos">
     <div className="wrap">
       <SectionHead
-        kicker="Proyectos"
-        title="Trabajos en construcción"
-        lead="Estoy preparando esta sección. Cada ficha se completará con el proyecto, su descripción y los enlaces al código."
+        kicker={projects.kicker}
+        title={projects.title}
+        lead={projects.lead}
       />
 
       <div className="projects">
-        {PROJECTS.map((project, i) => (
+        {projects.items.map((project, i) => (
           <Reveal
             key={i}
             className="project"
@@ -63,14 +64,14 @@ const Projects = () => (
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Ver proyecto
+                  {projects.viewProject}
                 </a>
               ) : (
                 <button
                   className="btn btn--primary btn--sm"
                   disabled
                 >
-                  Ver proyecto
+                  {projects.viewProject}
                 </button>
               )}
 
@@ -82,7 +83,7 @@ const Projects = () => (
                   rel="noopener noreferrer"
                 >
                   <Icon name="github" size={16} />
-                  GitHub
+                  {projects.repository}
                 </a>
               ) : (
                 <button
@@ -90,7 +91,7 @@ const Projects = () => (
                   disabled
                 >
                   <Icon name="github" size={16} />
-                  GitHub
+                  {projects.repository}
                 </button>
               )}
             </div>
@@ -99,6 +100,7 @@ const Projects = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default Projects;

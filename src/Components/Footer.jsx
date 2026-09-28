@@ -1,11 +1,9 @@
 import Icon from "./Icon";
-import { PROFILE } from "../Data/portfolio";
-
-const Footer = () => (
+const Footer = ({ content }) => (
   <footer className="footer">
     <div className="wrap footer__inner">
       <p>
-        © {new Date().getFullYear()} {PROFILE.name}
+        © {new Date().getFullYear()} {content.profile.name}
       </p>
 
       <p
@@ -16,7 +14,7 @@ const Footer = () => (
         }}
       >
         <Icon name="pin" size={14} />
-        {PROFILE.location}
+        {content.profile.location}
       </p>
     </div>
   </footer>

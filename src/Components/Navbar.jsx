@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 
 import Icon from "./Icon";
-import { PROFILE, SECTIONS } from "../Data/portfolio";
-
-const Navbar = ({ theme, toggleTheme }) => {
+const Navbar = ({ content, locale, theme, toggleTheme, toggleLocale }) => {
+  const { navigation, profile, sections } = content;
   const [open, setOpen] = useState(false);
   const [solid, setSolid] = useState(false);
   const [active, setActive] = useState("inicio");
@@ -15,17 +14,9 @@ const Navbar = ({ theme, toggleTheme }) => {
 
     onScroll();
 
-    window.addEventListener(
-      "scroll",
-      onScroll,
-      { passive: true }
-    );
+    window.addEventListener("scroll", onScroll, { passive: true });
 
-    return () =>
-      window.removeEventListener(
-        "scroll",
-        onScroll
-      );
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -39,12 +30,11 @@ const Navbar = ({ theme, toggleTheme }) => {
       },
       {
         rootMargin: "-45% 0px -50% 0px",
-      }
+      },
     );
 
-    SECTIONS.forEach(({ id }) => {
-      const element =
-        document.getElementById(id);
+    sections.forEach(({ id }) => {
+      const element = document.getElementById(id);
 
       if (element) {
         observer.observe(element);
@@ -52,13 +42,10 @@ const Navbar = ({ theme, toggleTheme }) => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [sections]);
 
   useEffect(() => {
-    document.body.classList.toggle(
-      "is-locked",
-      open
-    );
+    document.body.classList.toggle("is-locked", open);
 
     const onKey = (event) => {
       if (event.key === "Escape") {
@@ -68,23 +55,14 @@ const Navbar = ({ theme, toggleTheme }) => {
 
     window.addEventListener("keydown", onKey);
 
-    return () =>
-      window.removeEventListener(
-        "keydown",
-        onKey
-      );
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   return (
     <header>
       <nav
-        className={
-          "nav" +
-          (solid || open
-            ? " nav--solid"
-            : "")
-        }
-        aria-label="Navegación principal"
+        className={"nav" + (solid || open ? " nav--solid" : "")}
+        aria-label={navigation.mainLabel}
       >
         <div className="wrap nav__inner">
           <a
@@ -92,27 +70,20 @@ const Navbar = ({ theme, toggleTheme }) => {
             href="#inicio"
             onClick={() => setOpen(false)}
           >
-            <span
-              className="nav__mark"
-              aria-hidden="true"
-            >
-              {PROFILE.initials}
+            <span className="nav__mark" aria-hidden="true">
+              {profile.initials}
             </span>
 
-            {PROFILE.name}
+            {profile.name}
           </a>
 
           <ul className="nav__links">
-            {SECTIONS.map((section) => (
+            {sections.map((section) => (
               <li key={section.id}>
                 <a
                   className="nav__link"
                   href={`#${section.id}`}
-                  aria-current={
-                    active === section.id
-                      ? "true"
-                      : undefined
-                  }
+                  aria-current={active === section.id ? "true" : undefined}
                 >
                   {section.label}
                 </a>
@@ -122,62 +93,48 @@ const Navbar = ({ theme, toggleTheme }) => {
 
           <div className="nav__actions">
             <button
+              className="iconbtn languaje"
+              onClick={toggleLocale}
+              aria-label={
+                locale === "es"
+                  ? navigation.languageEnglish
+                  : navigation.languageSpanish
+              }
+            >
+              {locale === "es" ? "Es" : "En"}
+            </button>
+
+            <button
               className="iconbtn"
               onClick={toggleTheme}
               aria-label={
-                theme === "dark"
-                  ? "Activar tema claro"
-                  : "Activar tema oscuro"
+                theme === "dark" ? navigation.lightTheme : navigation.darkTheme
               }
             >
-              <Icon
-                name={
-                  theme === "dark"
-                    ? "sun"
-                    : "moon"
-                }
-              />
+              <Icon name={theme === "dark" ? "sun" : "moon"} />
             </button>
 
             <button
               className="iconbtn nav__burger"
-              onClick={() =>
-                setOpen((value) => !value)
-              }
+              onClick={() => setOpen((value) => !value)}
               aria-expanded={open}
               aria-controls="menu-movil"
-              aria-label={
-                open
-                  ? "Cerrar menú"
-                  : "Abrir menú"
-              }
+              aria-label={open ? navigation.closeMenu : navigation.openMenu}
             >
-              <Icon
-                name={
-                  open
-                    ? "close"
-                    : "menu"
-                }
-                size={20}
-              />
+              <Icon name={open ? "close" : "menu"} size={20} />
             </button>
           </div>
         </div>
       </nav>
 
       {open && (
-        <div
-          className="drawer"
-          id="menu-movil"
-        >
-          {SECTIONS.map((section) => (
+        <div className="drawer" id="menu-movil">
+          {sections.map((section) => (
             <a
               key={section.id}
               className="drawer__link"
               href={`#${section.id}`}
-              onClick={() =>
-                setOpen(false)
-              }
+              onClick={() => setOpen(false)}
             >
               {section.label}
             </a>

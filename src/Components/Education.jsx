@@ -1,19 +1,20 @@
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { EDUCATION } from "../Data/portfolio";
+const Education = ({ content }) => {
+  const { education } = content;
 
-const Education = () => (
+  return (
   <section className="section section--alt" id="formacion">
     <div className="wrap">
       <SectionHead
-        kicker="Formación"
-        title="Mi recorrido académico"
-        lead="Dos etapas: la base en desarrollo web y la especialización hacia datos e inteligencia artificial."
+        kicker={education.kicker}
+        title={education.title}
+        lead={education.lead}
       />
 
       <div className="timeline">
-        {EDUCATION.map((item, i) => (
+        {education.items.map((item, i) => (
           <Reveal
             key={item.title}
             className="tl"
@@ -63,6 +64,7 @@ const Education = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default Education;
