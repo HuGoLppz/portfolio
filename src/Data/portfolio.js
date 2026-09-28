@@ -11,7 +11,6 @@ const es = {
   language: "Español",
   profile: {
     name: "Hugo López Sanz",
-    initials: "H",
     role: "Desarrollador web",
     focus: "Inteligencia Artificial y Big Data",
     location: "Segovia, España",

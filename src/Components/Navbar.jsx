@@ -70,13 +70,8 @@ const Navbar = ({ content, locale, theme, toggleTheme, toggleLocale }) => {
             href="#inicio"
             onClick={() => setOpen(false)}
           >
-            <span className="nav__mark" aria-hidden="true">
-              {profile.initials}
-            </span>
-
             {profile.name}
           </a>
-
           <ul className="nav__links">
             {sections.map((section) => (
               <li key={section.id}>
