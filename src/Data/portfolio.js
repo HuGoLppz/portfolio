@@ -122,11 +122,20 @@ export const SKILLS = [
 export const PROJECTS = [
   {
     focus: "Aplicación",
+    title: "AutoRRSS",
+    description:
+      "Aplicación web para poder crear temas para tus redes sociales",
+    tech: ["Redes sociales", "IA"],
+    url: "",
+    repo: "https://github.com/HuGoLppz/AutoRRSS",
+  },
+  {
+    focus: "Aplicación",
     title: "FinTrack - Personal Finance Manager",
     description:
       "Aplicación web para controlar los ingresos y gastos",
     tech: ["Finanzas", "Personal"],
-    url: "https://github.com/HuGoLppz/FinTrack---Personal-Finance-Manager",
+    url: "",
     repo: "https://github.com/HuGoLppz/FinTrack---Personal-Finance-Manager",
   },
 ];
