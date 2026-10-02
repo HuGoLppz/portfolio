@@ -1,6 +1,6 @@
-import Icon from "./Icon";
-import Reveal from "./Reveal";
-import SectionHead from "./SectionHead";
+import Icon from "../Common/Icon";
+import Reveal from "../Common/Reveal";
+import SectionHead from "../Common/SectionHead";
 const Education = ({ content }) => {
   const { education } = content;
 

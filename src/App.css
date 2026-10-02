@@ -2,7 +2,7 @@
 
 /* ------------------------------------------------------------------
    Granito, tinta azul, agua (base) y dorado (en aprendizaje).
-   La decoración son unas curvas de nivel (src/assets/contours.svg).
+   La decoración son unas curvas de nivel vivas (HeroContours.jsx).
 ------------------------------------------------------------------- */
 
 :root {
@@ -297,6 +297,10 @@ p {
   color: var(--dusk-ink);
   padding: calc(var(--nav-h) + clamp(2.5rem, 7vw, 5rem)) 0
     clamp(4rem, 8vw, 6rem);
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -370,34 +374,6 @@ p {
   width: 100%;
 }
 
-.photo {
-  aspect-ratio: 1 / 0.9;
-  border-radius: 2px;
-  overflow: hidden;
-  background: rgba(237, 239, 233, 0.07);
-  border: 1px solid var(--dusk-line);
-  border-bottom: 0;
-  display: grid;
-}
-
-.photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.photo__empty {
-  align-self: end;
-  justify-self: center;
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-  padding-bottom: 2.4rem;
-  font-family: var(--display);
-  font-size: 0.9rem;
-  color: var(--dusk-ink-2);
-}
-
 .spec {
   margin: 0;
   border-top: 2px solid var(--dusk-gold);
@@ -421,21 +397,84 @@ p {
   line-height: 1.35;
 }
 
-/* Curvas de nivel: una sola ilustración grande que sale por el borde */
+/* Curvas de nivel vivas (HeroContours.jsx): salen por el borde y se desvanecen hacia el texto */
 
-.hero::before {
-  content: "";
+.hero__art {
   position: absolute;
   right: -18%;
   top: -22%;
   width: min(1150px, 130vw);
   aspect-ratio: 1100 / 900;
-  background: var(--dusk-line) center / contain no-repeat;
-  -webkit-mask: url("./assets/contours.svg") center / contain no-repeat;
-  mask: url("./assets/contours.svg") center / contain no-repeat;
   opacity: 0.9;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 4%, #000 46%);
+  mask-image: linear-gradient(to right, transparent 4%, #000 46%);
   animation: fade 1.6s ease 0.2s backwards;
+}
+
+.hero__art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hero__art path {
+  fill: none;
+  stroke: var(--dusk-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.hero__art .is-index {
+  stroke: rgba(237, 239, 233, 0.38);
+  stroke-width: 1.5;
+}
+
+.hero__art .is-water {
+  stroke: var(--dusk-water);
+  stroke-opacity: 0.55;
+}
+
+.hero__art-cross path {
+  stroke: rgba(237, 239, 233, 0.5);
+}
+
+.hero__art-dot {
+  fill: var(--dusk-gold);
+}
+
+.hero__art-halo {
+  fill: none;
+  stroke: var(--dusk-gold);
+  stroke-opacity: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Personaje de fondo; los ojos se animarán más adelante */
+
+.hero__character {
+  position: absolute;
+  right: clamp(0%, 6vw, 12%);
+  bottom: 0;
+  height: 100%;
+  aspect-ratio: 1024 / 1536;
+  -webkit-mask-image: radial-gradient(ellipse 50% 52% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 52% at 50% 50%, #000 55%, transparent 100%);
+  opacity: 0.9;
+  pointer-events: none;
+  user-select: none;
+  animation: fade 1.6s ease 0.4s backwards;
+}
+
+.hero__character img,
+.hero__character svg,
+.hero__character canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .hero__grid {
@@ -939,6 +978,7 @@ a.contact__card:hover .contact__value {
 }
 
 .cta::before {
+  display: none; /* solo tablet/móvil */
   content: "";
   position: absolute;
   right: -20%;
@@ -946,8 +986,8 @@ a.contact__card:hover .contact__value {
   width: 70%;
   aspect-ratio: 1100 / 900;
   background: var(--dusk-line);
-  -webkit-mask: url("./assets/contours.svg") center / contain no-repeat;
-  mask: url("./assets/contours.svg") center / contain no-repeat;
+  -webkit-mask: url("./assets/contours-static.svg") center / contain no-repeat;
+  mask: url("./assets/contours-static.svg") center / contain no-repeat;
   pointer-events: none;
 }
 
@@ -994,6 +1034,9 @@ a.contact__card:hover .contact__value {
 
 /* Tablet */
 @media (max-width: 960px) {
+  .cta::before {
+    display: block;
+  }
   :root {
     --nav-h: 60px;
   }
@@ -1017,7 +1060,12 @@ a.contact__card:hover .contact__value {
     align-items: start;
   }
 
-  .hero::before {
+  .hero__character {
+    right: -12%;
+    opacity: 0.35;
+  }
+
+  .hero__art {
     right: -35%;
     top: -8%;
     width: 130vw;
@@ -1026,26 +1074,6 @@ a.contact__card:hover .contact__value {
 
   .hero__intro {
     max-width: 38rem;
-  }
-
-  /* Ficha en horizontal: foto a la izquierda, datos a la derecha */
-  .card--profile {
-    display: grid;
-    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
-    gap: 0 2rem;
-    align-items: start;
-  }
-
-  .photo {
-    aspect-ratio: 1 / 1.1;
-  }
-
-  .spec {
-    border-top: 0;
-  }
-
-  .spec__row:first-child {
-    padding-top: 0;
   }
 
   .section {
@@ -1121,7 +1149,7 @@ a.contact__card:hover .contact__value {
     font-size: 1.2rem;
   }
 
-  .hero::before {
+  .hero__art {
     right: -75%;
     top: -4%;
     width: 170vw;
@@ -1137,23 +1165,6 @@ a.contact__card:hover .contact__value {
     justify-content: center;
   }
 
-  .card--profile {
-    display: block;
-    max-width: none;
-  }
-
-  .photo {
-    aspect-ratio: 16 / 9;
-    margin-bottom: 0;
-  }
-
-  .spec {
-    border-top: 2px solid var(--dusk-gold);
-  }
-
-  .spec__row:first-child {
-    padding-top: 0.5rem;
-  }
 
   .about__text p:first-child {
     font-size: 1.2rem;
@@ -1240,6 +1251,11 @@ a.contact__card:hover .contact__value {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero__art,
+  .hero__character {
+    animation: none;
+  }
+
   html {
     scroll-behavior: auto;
   }

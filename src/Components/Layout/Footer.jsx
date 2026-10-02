@@ -1,4 +1,4 @@
-import Icon from "./Icon";
+import Icon from "../Common/Icon";
 const Footer = ({ content }) => (
   <footer className="footer">
     <div className="wrap footer__inner">

@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
-import Navbar from "./Components/Navbar.jsx";
-import Hero from "./Components/Hero.jsx";
-import About from "./Components/About.jsx";
-import Education from "./Components/Education.jsx";
-import Skills from "./Components/Skills.jsx";
-import Projects from "./Components/Projects.jsx";
-import Contact from "./Components/Contact.jsx";
-import Footer from "./Components/Footer.jsx";
+import Navbar from "./Components/Layout/Navbar.jsx";
+import Hero from "./Components/Hero/Hero.jsx";
+import About from "./Components/Sections/About.jsx";
+import Education from "./Components/Sections/Education.jsx";
+import Skills from "./Components/Sections/Skills.jsx";
+import Projects from "./Components/Sections/Projects.jsx";
+import Contact from "./Components/Sections/Contact.jsx";
+import Footer from "./Components/Layout/Footer.jsx";
 import { DEFAULT_LOCALE, getPortfolio } from "./Data/portfolio.js";
 
 function App() {

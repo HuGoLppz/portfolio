@@ -1,4 +1,6 @@
-import Icon from "./Icon";
+import Icon from "../Common/Icon";
+import HeroContours from "./HeroContours";
+import Character from "./Character3D";
 
 const isPlaceholder = (value) => !value || value.trim().startsWith("[");
 
@@ -6,11 +8,14 @@ const Hero = ({ content }) => {
   const { hero, profile } = content;
   return (
     <section className="hero" id="inicio">
+      <HeroContours />
+
+      <Character />
+
       <div className="wrap hero__grid">
         <div>
-          <p className="hero__status enter d1">
+          <p className="hero__status enter d1" style={{ display: "none" /*!!!!!!!!!!!!!*/}}>
             <span className="pulse" aria-hidden="true" />
-
             {profile.statusLine}
           </p>
 
@@ -20,9 +25,7 @@ const Hero = ({ content }) => {
             {profile.role} {hero.roleConnector} <b>{profile.focus}</b>
           </p>
 
-          <p className="hero__intro enter d4">
-            {hero.intro}
-          </p>
+          <p className="hero__intro enter d4">{hero.intro}</p>
 
           <div className="hero__cta enter d5">
             <a className="btn btn--primary" href="#proyectos">
@@ -36,19 +39,10 @@ const Hero = ({ content }) => {
           </div>
         </div>
 
-        <aside className="card--profile enter d6" aria-label={hero.profileCardLabel}>
-          <div className="photo">
-            {profile.photo ? (
-              <img src={profile.photo} alt={profile.photoAlt} />
-            ) : (
-              <div className="photo__empty">
-                <Icon name="target" size={22} />
-
-                <span>{hero.addPhoto}</span>
-              </div>
-            )}
-          </div>
-
+        <aside
+          className="card--profile enter d6"
+          aria-label={hero.profileCardLabel}
+        >
           <dl className="spec">
             {[
               [hero.details.location, profile.location],

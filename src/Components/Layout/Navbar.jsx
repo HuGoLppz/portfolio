@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Icon from "./Icon";
+import Icon from "../Common/Icon";
 const Navbar = ({ content, locale, theme, toggleTheme, toggleLocale }) => {
   const { navigation, profile, sections } = content;
   const [open, setOpen] = useState(false);
