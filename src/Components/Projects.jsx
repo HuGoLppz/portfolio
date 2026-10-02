@@ -25,10 +25,6 @@ const Projects = ({ content }) => {
             delay={(i % 2) * 90}
           >
             <div className="project__top">
-              <span className="project__num" aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-
               <span className="project__focus">
                 {project.focus}
               </span>

@@ -6,12 +6,6 @@ const Hero = ({ content }) => {
   const { hero, profile } = content;
   return (
     <section className="hero" id="inicio">
-      <div className="hero__bg" aria-hidden="true">
-        <div className="hero__dots" />
-        <div className="hero__glow hero__glow--a" />
-        <div className="hero__glow hero__glow--b" />
-      </div>
-
       <div className="wrap hero__grid">
         <div>
           <p className="hero__status enter d1">
