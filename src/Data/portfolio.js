@@ -100,7 +100,7 @@ const es = {
         subtitle: "Especialización",
         center: "Instituto Nebrija de Formación Profesional",
         period: "2026-2027",
-        status: "current",
+        status: "next",
         statusText: "En formación",
         description:
           "Especialización orientada al análisis y tratamiento de datos, la inteligencia artificial, el aprendizaje automático y el desarrollo de soluciones basadas en datos.",
@@ -303,7 +303,7 @@ const en = {
         subtitle: "Specialization",
         center: "Instituto Nebrija de Formación Profesional",
         period: "2026-2027",
-        status: "current",
+        status: "next",
         statusText: "Currently studying",
         description:
           "Specialization focused on data analysis and processing, artificial intelligence, machine learning, and the development of data-driven solutions.",
