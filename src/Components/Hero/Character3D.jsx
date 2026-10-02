@@ -1,104 +1,38 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import modelUrl from "../../assets/white_mesh.glb";
+import modelUrl from "../../assets/character.glb";
 
 /*
-  Personaje 3D cargado desde white_mesh.glb (una sola malla sin esqueleto).
-  Se le añade un esqueleto de 3 huesos (cuerpo > cuello > cabeza) con pesos
-  calculados por altura, así el cursor mueve cuello y cabeza con suavidad.
+  Personaje 3D cargado desde character.glb: versión 3D de character.png
+  (se regenera con scripts/character). Viene separado por partes y materiales
+  (piel, ojos, pelo, sudadera, vaqueros, zapatillas…) y con un esqueleto de
+  3 huesos (Root > Neck > Head); el cursor mueve cuello y cabeza con suavidad.
 */
 
 const MODEL_HEIGHT = 6.2;
-// Alturas en el espacio original del modelo (y de -1 a 0.96)
-const NECK_FROM = 0.42;
-const NECK_TO = 0.66;
-const HEAD_FROM = 0.6;
-const HEAD_TO = 0.72;
-const NECK_PIVOT_Y = 0.6;
-
-const smooth = (a, b, x) => {
-  const t = THREE.MathUtils.clamp((x - a) / (b - a), 0, 1);
-  return t * t * (3 - 2 * t);
-};
 
 const prepare = (gltf) => {
-  let src;
-  gltf.scene.traverse((o) => {
-    if (o.isMesh && !src) src = o;
+  const scene = gltf.scene;
+  const root = scene.getObjectByName("Root");
+  const neck = scene.getObjectByName("Neck");
+  const head = scene.getObjectByName("Head");
+  scene.traverse((o) => {
+    if (o.isSkinnedMesh) o.frustumCulled = false; // la cabeza gira: se evita el recorte por caja
   });
-  const geo = src.geometry.clone();
-  const pos = geo.attributes.position;
-
-  // la malla trae unos pocos triángulos-fibra (aristas > 1.6) que dibujan una
-  // línea de la cabeza a los pies: se descartan
-  const MAX_EDGE = 0.15;
-  const a = new THREE.Vector3();
-  const b = new THREE.Vector3();
-  const c = new THREE.Vector3();
-  const srcIndex = geo.index.array;
-  const keep = [];
-  for (let i = 0; i < srcIndex.length; i += 3) {
-    a.fromBufferAttribute(pos, srcIndex[i]);
-    b.fromBufferAttribute(pos, srcIndex[i + 1]);
-    c.fromBufferAttribute(pos, srcIndex[i + 2]);
-    if (
-      a.distanceTo(b) < MAX_EDGE &&
-      b.distanceTo(c) < MAX_EDGE &&
-      a.distanceTo(c) < MAX_EDGE
-    ) {
-      keep.push(srcIndex[i], srcIndex[i + 1], srcIndex[i + 2]);
-    }
-  }
-  geo.setIndex(keep);
-  geo.computeVertexNormals();
-
-  const count = pos.count;
-  const idx = new Uint16Array(count * 4);
-  const wts = new Float32Array(count * 4);
-  for (let i = 0; i < count; i += 1) {
-    const y = pos.getY(i);
-    const s = smooth(NECK_FROM, NECK_TO, y); // cuerpo -> cuello
-    const t = smooth(HEAD_FROM, HEAD_TO, y); // cuello -> cabeza
-    wts[i * 4] = 1 - s;
-    wts[i * 4 + 1] = s * (1 - t);
-    wts[i * 4 + 2] = s * t;
-    idx[i * 4 + 1] = 1;
-    idx[i * 4 + 2] = 2;
-  }
-  geo.setAttribute("skinIndex", new THREE.Uint16BufferAttribute(idx, 4));
-  geo.setAttribute("skinWeight", new THREE.Float32BufferAttribute(wts, 4));
-
-  const root = new THREE.Bone();
-  const neck = new THREE.Bone();
-  neck.position.set(0, NECK_PIVOT_Y, 0);
-  const head = new THREE.Bone();
-  head.position.set(0, 0.12, 0);
-  root.add(neck);
-  neck.add(head);
-
-  const material = new THREE.MeshStandardMaterial({
-    color: "#e9e4dc",
-    roughness: 0.65,
-    metalness: 0,
-  });
-  const mesh = new THREE.SkinnedMesh(geo, material);
-  mesh.add(root);
-  mesh.bind(new THREE.Skeleton([root, neck, head]));
 
   // colocar: pies en y=0, centrado en x/z, altura MODEL_HEIGHT
-  geo.computeBoundingBox();
-  const box = geo.boundingBox;
+  const box = new THREE.Box3().setFromObject(scene);
   const k = MODEL_HEIGHT / (box.max.y - box.min.y);
   const holder = new THREE.Group();
-  holder.add(mesh);
-  mesh.scale.setScalar(k);
-  mesh.position.set(
+  holder.add(scene);
+  scene.scale.setScalar(k);
+  scene.position.set(
     -((box.min.x + box.max.x) / 2) * k,
     -box.min.y * k,
     -((box.min.z + box.max.z) / 2) * k,
   );
-  return { holder, root, neck, head, k, box };
+  return { holder, root, neck, head };
 };
 
 const Character3D = () => {
@@ -123,20 +57,24 @@ const Character3D = () => {
     camera.position.set(0, 3.2, 17);
     camera.lookAt(0, 3.1, 0);
 
-    // luces: ambiente frío, principal cálida, contraluz azul como en la imagen
-    scene.add(new THREE.HemisphereLight("#9fb4ff", "#2a1a10", 0.9));
-    const key = new THREE.DirectionalLight("#ffe2c4", 2.4);
-    key.position.set(3, 7, 8);
+    // luces: principal cálida desde la izquierda del espectador (como en la ilustración), relleno frontal
+    // suave y contraluces azul y cálido para recortar la silueta
+    scene.add(new THREE.HemisphereLight("#fff6ee", "#9a8478", 1.7));
+    const key = new THREE.DirectionalLight("#fff1e2", 2.5);
+    key.position.set(-4, 6, 8);
     scene.add(key);
-    const rimBlue = new THREE.DirectionalLight("#5f8dff", 2.2);
+    const front = new THREE.DirectionalLight("#fff0e6", 0.6);
+    front.position.set(1, 1.5, 9);
+    scene.add(front);
+    const fill = new THREE.DirectionalLight("#d6defa", 0.6);
+    fill.position.set(5, 2, 6);
+    scene.add(fill);
+    const rimBlue = new THREE.DirectionalLight("#5f8dff", 1.3);
     rimBlue.position.set(-6, 1, -3);
     scene.add(rimBlue);
-    const rimWarm = new THREE.DirectionalLight("#ffb27a", 1.4);
+    const rimWarm = new THREE.DirectionalLight("#ffb27a", 0.9);
     rimWarm.position.set(6, 5, -4);
     scene.add(rimWarm);
-    const fill = new THREE.PointLight("#6f95ff", 14, 18);
-    fill.position.set(0, 0.5, 5);
-    scene.add(fill);
 
     let model = null;
     let disposed = false;
