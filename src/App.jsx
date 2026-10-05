@@ -20,9 +20,7 @@ function App() {
 
     try {
       saved = localStorage.getItem("hl-theme");
-    } catch (e) {
-
-    }
+    } catch {}
 
     const prefersDark =
       window.matchMedia &&
@@ -36,9 +34,7 @@ function App() {
 
     try {
       localStorage.setItem("hl-theme", theme);
-    } catch (e) {
-      
-    }
+    } catch {}
   }, [theme]);
 
   useEffect(() => {

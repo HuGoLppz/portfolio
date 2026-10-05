@@ -195,12 +195,20 @@ p {
   font-weight: 800;
   font-size: 1.3rem;
   letter-spacing: -0.02em;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .nav__links {
   display: flex;
   align-items: center;
   gap: 1.6rem;
+  transform: translateX(calc(-1 * var(--links-shift, 0px)));
+  transition: transform 0.28s ease;
+}
+
+.nav--solid .nav__links {
+  transform: none;
 }
 
 .nav__link {
@@ -311,35 +319,11 @@ p {
   align-items: center;
 }
 
-.hero__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1.6rem;
-  font-family: var(--display);
-  font-stretch: 90%;
-  font-size: 1rem;
-  color: var(--dusk-ink-2);
-}
-
-.pulse {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--dusk-gold);
-  box-shadow: 0 0 0 0 rgba(232, 181, 82, 0.55);
-  animation: pulse 2.4s ease-out infinite;
-}
-
-@keyframes pulse {
-  to {
-    box-shadow: 0 0 0 10px rgba(232, 181, 82, 0);
-  }
-}
-
 .hero__name {
   margin-bottom: 1.8rem;
   text-wrap: wrap;
+  transform-origin: top left;
+  will-change: transform;
 }
 
 .hero__role {
@@ -467,8 +451,6 @@ p {
   animation: fade 1.6s ease 0.4s backwards;
 }
 
-.hero__character img,
-.hero__character svg,
 .hero__character canvas {
   position: absolute;
   inset: 0;
@@ -1134,11 +1116,6 @@ a.contact__card:hover .contact__value {
   .hero {
     padding-top: calc(var(--nav-h) + 2rem);
     padding-bottom: 3rem;
-  }
-
-  .hero__status {
-    margin-bottom: 1.2rem;
-    font-size: 0.95rem;
   }
 
   .hero__name {

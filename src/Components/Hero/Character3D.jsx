@@ -1,24 +1,37 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import modelUrl from "../../assets/character.glb";
+import modelUrl from "../../assets/character_realistic.glb";
+import { createStudioEnvironment } from "./studioEnvironment.js";
 
 /*
-  Personaje 3D cargado desde character.glb: versión 3D de character.png
-  (se regenera con scripts/character). Viene separado por partes y materiales
-  (piel, ojos, pelo, sudadera, vaqueros, zapatillas…) y con un esqueleto de
-  3 huesos (Root > Neck > Head); el cursor mueve cuello y cabeza con suavidad.
+  Personaje 3D cargado desde character_realistic.glb: versión 3D de character.png
+  con el pelo de "Hair 2.obj", las zapatillas Air Jordan 4 University Blue y la
+  cara refinada (párpados, labios, orejas, piel con micro-relieve, ojos con iris
+  y córnea, cejas y pestañas de pelos individuales). Viene separado por partes y
+  materiales (piel, ojos, pelo, sudadera, vaqueros, zapatillas…) y con un
+  esqueleto de 3 huesos (Root > Neck > Head); el cursor mueve cuello y cabeza
+  con suavidad.
 */
 
 const MODEL_HEIGHT = 6.2;
 
-const prepare = (gltf) => {
+// cuánto refleja el entorno de estudio cada material (la piel casi nada para no
+// lavar su color; los ojos mucho, para que la córnea tenga catchlights)
+const ENV_INTENSITY = { skin: 0.3, eyes: 1.2, hair: 0.55, hair_fibers: 0.5, brow_hair: 0.5 };
+
+const prepare = (gltf, envTexture) => {
   const scene = gltf.scene;
   const root = scene.getObjectByName("Root");
   const neck = scene.getObjectByName("Neck");
   const head = scene.getObjectByName("Head");
   scene.traverse((o) => {
     if (o.isSkinnedMesh) o.frustumCulled = false; // la cabeza gira: se evita el recorte por caja
+    const k = o.isMesh && ENV_INTENSITY[o.material.name];
+    if (k) {
+      o.material.envMap = envTexture;
+      o.material.envMapIntensity = k;
+    }
   });
 
   // colocar: pies en y=0, centrado en x/z, altura MODEL_HEIGHT
@@ -53,6 +66,10 @@ const Character3D = () => {
     host.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
+    // reflejos de estudio (catchlights de la córnea, brillo del pelo y de los labios)
+    const envTarget = createStudioEnvironment(renderer);
+    scene.environment = envTarget.texture;
+    scene.environmentIntensity = 0.5;
     const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
     camera.position.set(0, 3.2, 17);
     camera.lookAt(0, 3.1, 0);
@@ -80,7 +97,7 @@ const Character3D = () => {
     let disposed = false;
     new GLTFLoader().load(modelUrl, (gltf) => {
       if (disposed) return;
-      model = prepare(gltf);
+      model = prepare(gltf, envTarget.texture);
       scene.add(model.holder);
     });
 
@@ -161,9 +178,12 @@ const Character3D = () => {
       scene.traverse((o) => {
         if (o.isMesh) {
           o.geometry.dispose();
+          // las texturas (piel, ojos, zapatillas) no se liberan con el material
+          for (const value of Object.values(o.material)) if (value?.isTexture) value.dispose();
           o.material.dispose();
         }
       });
+      envTarget.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };

@@ -17,7 +17,6 @@ const es = {
     age: "22 años",
     degree: "Técnico Superior en Desarrollo de Aplicaciones Web",
     availability: "Disponible",
-    statusLine: "Abierto a nuevas oportunidades en el sector tecnológico",
     photo: null,
     photoAlt: "Foto de Hugo López Sanz",
   },
@@ -220,7 +219,6 @@ const en = {
     age: "22 years old",
     degree: "Higher Technician in Web Application Development",
     availability: "Available",
-    statusLine: "Open to new opportunities in the technology sector",
     photoAlt: "Photo of Hugo López Sanz",
   },
   sections: [

@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Icon from "../Common/Icon";
 const Navbar = ({ content, locale, theme, toggleTheme, toggleLocale }) => {
   const { navigation, profile, sections } = content;
   const [open, setOpen] = useState(false);
-  const [solid, setSolid] = useState(false);
-  const [active, setActive] = useState("inicio");
+  const [solid, setSolid] = useState(false);  const [active, setActive] = useState("inicio");
+  const brandRef = useRef(null);
+  const linksRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
-      setSolid(window.scrollY > 24);
-    };
+      setSolid(window.scrollY > 24);    };
 
     onScroll();
 
@@ -18,6 +18,27 @@ const Navbar = ({ content, locale, theme, toggleTheme, toggleLocale }) => {
 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const measure = () => {
+      const brand = brandRef.current;
+      const links = linksRef.current;
+
+      if (!brand || !links || links.offsetParent === null) {
+        return;
+      }
+
+      const shift = links.offsetLeft - brand.offsetLeft;
+
+      links.style.setProperty("--links-shift", `${Math.max(shift, 0)}px`);
+    };
+
+    measure();
+    document.fonts?.ready.then(measure);
+    window.addEventListener("resize", measure);
+
+    return () => window.removeEventListener("resize", measure);
+  }, [locale, content]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -65,14 +86,10 @@ const Navbar = ({ content, locale, theme, toggleTheme, toggleLocale }) => {
         aria-label={navigation.mainLabel}
       >
         <div className="wrap nav__inner">
-          <a
-            className="nav__brand"
-            href="#inicio"
-            onClick={() => setOpen(false)}
-          >
+          <span ref={brandRef} className="nav__brand">
             {profile.name}
-          </a>
-          <ul className="nav__links">
+          </span>
+          <ul ref={linksRef} className="nav__links">
             {sections.map((section) => (
               <li key={section.id}>
                 <a
