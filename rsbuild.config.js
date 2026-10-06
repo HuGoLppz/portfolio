@@ -8,8 +8,6 @@ export default defineConfig({
   source: {
     entry: {
       index: './src/index.jsx',
-      // visor de inspección del personaje 3D (estudio, vistas, comparación con la referencia): /viewer.html
-      viewer: './src/viewer/main.js',
     },
     assetsInclude: /\.glb$/,
   },
