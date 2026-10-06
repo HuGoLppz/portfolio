@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= htmlPlugin.options.title %></title>
+    <style>
+      /* Loader inline: se pinta antes de que descargue nada más (JS, CSS, fuentes, modelo 3D). */
+      html { --b-bg:#e6e8e3; --b-ink:#475960; --b-water:#0a6c8a; --b-gold:#d9a441; background:var(--b-bg); }
+      html[data-theme="dark"] { --b-bg:#0d1920; --b-ink:#a9b8bb; --b-water:#62c6e3; --b-gold:#e3b04b; }
+      html.is-loading #root { visibility: hidden; }
+      html.is-loading #root *, html.is-loading #root *::before, html.is-loading #root *::after { animation: none !important; }
+      #boot-loader { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; background:var(--b-bg); transition:opacity .6s ease, visibility .6s ease; }
+      #boot-loader.is-done { opacity:0; visibility:hidden; pointer-events:none; }
+      #boot-loader svg { display:block; width:min(550px,65vw); aspect-ratio:1100/900; overflow:visible;
+        -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 40%,transparent 100%);
+        mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 40%,transparent 100%); }
+      #boot-loader path { fill:none; stroke:var(--b-ink); stroke-opacity:.35; stroke-width:1; vector-effect:non-scaling-stroke; }
+      #boot-loader .is-index { stroke-opacity:.6; stroke-width:1.5; }
+      #boot-loader .is-water { stroke:var(--b-water); stroke-opacity:.85; }
+      #boot-loader .cross path { stroke-opacity:.7; }
+      #boot-loader .dot { fill:var(--b-gold); }
+      #boot-loader .halo { fill:none; stroke:var(--b-gold); stroke-opacity:.5; vector-effect:non-scaling-stroke; }
+    </style>
+    <script>
+      (function () {
+        var de = document.documentElement;
+        var saved = null;
+        try { saved = localStorage.getItem("hl-theme"); } catch (e) {}
+        var dark = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches;
+        de.setAttribute("data-theme", saved || (dark ? "dark" : "light"));
+        de.classList.add("is-loading");
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="boot-loader" role="status" aria-live="polite" aria-label="Cargando">
+      <svg viewBox="0 0 1100 900" focusable="false" aria-hidden="true">
+        <g id="boot-rings"></g>
+        <g id="boot-cross" class="cross"><path d="M536 450H564M550 436V464" /></g>
+        <g id="boot-halo"><circle class="halo" r="9" /></g>
+        <g id="boot-dot"><circle class="dot" r="3.2" /></g>
+      </svg>
+    </div>
+    <div id="root"></div>
+    <script>
+      /* Mismas curvas de nivel vivas que HeroContours.jsx */
+      (function () {
+        var NS = "http://www.w3.org/2000/svg";
+        var CX = 550, CY = 450, RINGS = 22, POINTS = 144, TAU = Math.PI * 2, WATER = 14;
+        var H = [[2,.085,.7,.05],[3,.055,2.1,-.035],[5,.03,4,.06],[7,.014,1.3,-.045]];
+        var g = document.getElementById("boot-rings");
+        var paths = [];
+        for (var k = 0; k < RINGS; k++) {
+          var p = document.createElementNS(NS, "path");
+          if (k === WATER) p.setAttribute("class", "is-water");
+          else if (k % 5 === 0) p.setAttribute("class", "is-index");
+          g.appendChild(p); paths.push(p);
+        }
+        function off(k, t) {
+          var d = 1 - (k / RINGS) * .7, ph = .12 * t - .12 * k;
+          return [Math.cos(ph) * 30 * d, Math.sin(ph) * 30 * d];
+        }
+        function pt(k, th, t) {
+          var base = 30 + k * 17.5, reach = .3 + .7 * Math.min(1, k / 10), w = 1;
+          for (var i = 0; i < H.length; i++) w += H[i][1] * reach * Math.sin(H[i][0] * th + H[i][2] + H[i][3] * t - .06 * k);
+          var r = base * w, o = off(k, t);
+          return [CX + r * Math.cos(th) * 1.1 + o[0], CY + r * Math.sin(th) * .9 + o[1]];
+        }
+        var dot = document.getElementById("boot-dot"), halo = document.getElementById("boot-halo"), cross = document.getElementById("boot-cross");
+        function draw(t) {
+          for (var k = 0; k < RINGS; k++) {
+            var d = "";
+            for (var i = 0; i < POINTS; i++) { var q = pt(k, i / POINTS * TAU, t); d += (i ? "L" : "M") + q[0].toFixed(1) + " " + q[1].toFixed(1); }
+            paths[k].setAttribute("d", d + "Z");
+          }
+          var w = pt(WATER, t * .11, t), at = "translate(" + w[0].toFixed(1) + " " + w[1].toFixed(1) + ")";
+          dot.setAttribute("transform", at); halo.setAttribute("transform", at);
+          var c = off(0, t); cross.setAttribute("transform", "translate(" + c[0].toFixed(1) + " " + c[1].toFixed(1) + ")");
+        }
+        var t = 0, last = performance.now();
+        var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+        draw(0);
+        if (still) return;
+        (function tick(now) {
+          if (!g.isConnected) return;
+          t += Math.min(.05, (now - last) / 1000 || 0); last = now;
+          draw(t); requestAnimationFrame(tick);
+        })(last);
+      })();
+    </script>
+  </body>
+</html>

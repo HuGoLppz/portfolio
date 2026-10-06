@@ -6,7 +6,7 @@ import Character3D from "./Character3D";
 
 const isPlaceholder = (value) => !value || value.trim().startsWith("[");
 
-const Hero = ({ content }) => {
+const Hero = ({ content, onCharacterReady }) => {
   const { hero, profile } = content;
   const nameRef = useRef(null);
 
@@ -66,7 +66,7 @@ const Hero = ({ content }) => {
     <section className="hero" id="inicio">
       <HeroContours />
 
-      <Character3D />
+      <Character3D onReady={onCharacterReady} />
 
       <div className="wrap hero__grid">
         <div>

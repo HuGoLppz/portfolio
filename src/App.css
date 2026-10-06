@@ -1244,3 +1244,19 @@ a.contact__card:hover .contact__value {
     transition: none !important;
   }
 }
+
+/* ------------------------------------------------------------------
+   Pantalla de carga: el loader vive inline en index.html para pintarse el primero.
+   Mientras html.is-loading, la página queda oculta y sus animaciones de
+   entrada no arrancan hasta que se retira la clase.
+------------------------------------------------------------------- */
+
+html.is-loading #root {
+  visibility: hidden;
+}
+
+html.is-loading #root *,
+html.is-loading #root *::before,
+html.is-loading #root *::after {
+  animation: none !important;
+}

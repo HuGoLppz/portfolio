@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Navbar from "./Components/Layout/Navbar.jsx";
 import Hero from "./Components/Hero/Hero.jsx";
@@ -13,6 +13,13 @@ import { DEFAULT_LOCALE, getPortfolio } from "./Data/portfolio.js";
 function App() {
   const [theme, setTheme] = useState("dark");
   const [locale, setLocale] = useState(DEFAULT_LOCALE);
+  const [ready, setReady] = useState(false);
+  const flags = useRef({ page: false, fonts: false, character: false });
+  const check = useRef(() => {});
+  const onCharacterReady = useCallback(() => {
+    flags.current.character = true;
+    check.current();
+  }, []);
   const portfolio = getPortfolio(locale);
 
   useEffect(() => {
@@ -41,6 +48,42 @@ function App() {
     document.documentElement.lang = locale;
   }, [locale]);
 
+  // Nada se muestra hasta que carguen recursos de la página, fuentes y modelo 3D.
+  useEffect(() => {
+    const f = flags.current;
+    check.current = () => {
+      if (f.page && f.fonts && f.character) setReady(true);
+    };
+    const mark = (key) => () => {
+      f[key] = true;
+      check.current();
+    };
+
+    if (document.readyState === "complete") f.page = true;
+    else window.addEventListener("load", mark("page"), { once: true });
+
+    const fonts = document.fonts
+      ? Promise.all([
+          document.fonts.load('1em "Bricolage Grotesque"'),
+          document.fonts.load('1em "Newsreader"'),
+        ])
+      : Promise.resolve();
+    fonts.catch(() => {}).then(mark("fonts"));
+
+    check.current();
+    const fallback = setTimeout(() => setReady(true), 8000); // por si algo no responde
+    return () => clearTimeout(fallback);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("is-loading", !ready);
+    if (!ready) return undefined;
+    const loader = document.getElementById("boot-loader");
+    loader?.classList.add("is-done");
+    const t = setTimeout(() => loader?.remove(), 700);
+    return () => clearTimeout(t);
+  }, [ready]);
+
   const toggleTheme = useCallback(() => {
     setTheme((current) =>
       current === "dark" ? "light" : "dark"
@@ -62,7 +105,7 @@ function App() {
       />
 
       <main id="main">
-        <Hero content={portfolio} />
+        <Hero content={portfolio} onCharacterReady={onCharacterReady} />
         <About content={portfolio} />
         <Education content={portfolio} />
         <Skills content={portfolio} />

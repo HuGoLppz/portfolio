@@ -48,8 +48,10 @@ const prepare = (gltf, envTexture) => {
   return { holder, root, neck, head };
 };
 
-const Character3D = () => {
+const Character3D = ({ onReady }) => {
   const hostRef = useRef(null);
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -59,7 +61,8 @@ const Character3D = () => {
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     } catch {
-      return undefined; // sin WebGL: el contenedor queda vacío
+      onReadyRef.current?.(); // sin WebGL: el contenedor queda vacío
+      return undefined;
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -95,11 +98,18 @@ const Character3D = () => {
 
     let model = null;
     let disposed = false;
-    new GLTFLoader().load(modelUrl, (gltf) => {
-      if (disposed) return;
-      model = prepare(gltf, envTarget.texture);
-      scene.add(model.holder);
-    });
+    let announce = false;
+    new GLTFLoader().load(
+      modelUrl,
+      (gltf) => {
+        if (disposed) return;
+        model = prepare(gltf, envTarget.texture);
+        scene.add(model.holder);
+        announce = true; // se avisa tras el primer fotograma con el modelo
+      },
+      undefined,
+      () => onReadyRef.current?.(),
+    );
 
     const resize = () => {
       const w = host.clientWidth;
@@ -165,6 +175,11 @@ const Character3D = () => {
       }
 
       renderer.render(scene, camera);
+
+      if (announce) {
+        announce = false;
+        onReadyRef.current?.();
+      }
     };
     render();
 
